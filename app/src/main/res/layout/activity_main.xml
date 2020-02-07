@@ -22,11 +22,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tabLayout"
+            android:background="@color/colorPrimary"
             app:tabMode="fixed"
             app:tabMaxWidth="0dp"
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/colorAccent"
-            app:tabTextColor="#ffffff"
+            app:tabTextColor="@android:color/white"
             />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -36,7 +37,6 @@
         android:id="@+id/viewPager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_track"
         android:layout_width="wrap_content"
@@ -46,8 +46,7 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/outline_add_white_36"
-        android:layout_gravity="bottom|right"
-        app:layout_anchorGravity="bottom|right|end"
+        android:layout_gravity="bottom|end"
         />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

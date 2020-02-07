@@ -2,13 +2,13 @@ package com.example.jpt_demo
 
 import android.app.AlertDialog
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_one.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,11 +23,32 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = fragmentAdapter
         tabLayout.setupWithViewPager(viewPager)
 
+        viewPager?.addOnPageChangeListener(object:OnPageChangeListener {
+
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+            }
+            override fun onPageSelected(position: Int) {
+                when (position){
+                    0 -> fab_track.show()
+                    else -> fab_track.hide()
+                }
+            }
+
+        })
+
         val fab_track = findViewById<View>(R.id.fab_track)
 
-        this.fab_track.setOnClickListener( View.OnClickListener { showProductDialog("Track this item?",
-            "Product Info and image Here", this@MainActivity ) })
-
+        fab_track.setOnClickListener(View.OnClickListener {
+            showProductDialog(
+                "Track this item?",
+                "Product Info and image Here", this
+            )
+        }
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -15,4 +15,9 @@
     <string name="re_type_password">Re-type Password</string>
     <string name="your_name">Full Name</string>
     <string name="tag">LogIn to track the price of your favorite items</string>
+    <string name="product_image">product image</string>
+    <string name="by">by</string>
+    <string name="current_price_ksh">Current Price: Ksh</string>
+    <string name="previous_price_ksh">Previous Price: Ksh</string>
+    <string name="seller">Seller</string>
 </resources>

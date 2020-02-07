@@ -7,9 +7,9 @@ import androidx.fragment.app.FragmentPagerAdapter
 class PagerAdapter (fragmanager: FragmentManager) : FragmentPagerAdapter(fragmanager){
     override fun getItem(position: Int): Fragment {
         return when (position){
-            0 -> Fragment_one()
-            1 -> Fragment_two()
-            else -> return Fragment_three()
+            0 -> FragmentWebview()
+            1 -> FragmentTracklist()
+            else -> return FragmentMe()
         }
     }
 
@@ -25,5 +25,4 @@ class PagerAdapter (fragmanager: FragmentManager) : FragmentPagerAdapter(fragman
             else -> return "ME"
         }
     }
-
 }
