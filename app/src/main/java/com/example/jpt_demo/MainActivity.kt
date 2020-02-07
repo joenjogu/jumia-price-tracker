@@ -16,6 +16,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+
         toolbar.setTitle("Jumia Price Tracker")
         setSupportActionBar(toolbar)
 

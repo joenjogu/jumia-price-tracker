@@ -69,22 +69,16 @@
         android:text="@string/login"
         android:textColor="@android:color/white" />
 
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/ic_arrow_right"
-        android:layout_above="@id/swipeRight"
-        android:layout_centerHorizontal="true"/>
-
     <TextView
         android:id="@+id/swipeRight"
+        android:textColor="@color/colorHyperlink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="425dp"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:fontFamily="sans-serif"
-        android:text="@string/swipe_left_to_register"
+        android:text="@string/not_registered"
         android:textSize="15sp" />
 
 </RelativeLayout>

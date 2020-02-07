@@ -93,7 +93,7 @@
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="30dp"
@@ -102,22 +102,18 @@
             android:text="@string/register"
             android:textColor="@android:color/white" />
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_arrow_left"
-            android:layout_above="@id/swipeLeft"
-            android:layout_centerHorizontal="true"/>
-
         <TextView
             android:id="@+id/swipeLeft"
+            android:textColor="@color/colorHyperlink"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="75dp"
             android:layout_marginBottom="20dp"
             android:fontFamily="sans-serif"
-            android:text="@string/swipe_right_to_login"
+            android:text="@string/already_registered_login"
             android:textSize="15sp" />
 
     </RelativeLayout>
