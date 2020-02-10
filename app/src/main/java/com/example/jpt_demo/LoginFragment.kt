@@ -62,12 +62,12 @@ class LoginFragment : Fragment() {
                 editor.commit()
                 mEmail.text.clear()
                 mPassword.text.clear()
-                Toast.makeText(context,"LogIn Successful",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"Login Successful",Toast.LENGTH_SHORT).show()
                 mProgressbar.setVisibility (View.GONE)
                 startActivity(Intent(context,MainActivity::class.java))
                 fragmentManager!!.popBackStackImmediate()
             } else {
-                Toast.makeText(context, " LogIn Error! Try Again" , Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, " Login Error! Try Again" , Toast.LENGTH_SHORT).show()
                 mProgressbar.setVisibility (View.GONE)
             }
         }
