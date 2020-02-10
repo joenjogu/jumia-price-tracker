@@ -24,7 +24,7 @@
         android:layout_marginStart="25dp"
         android:layout_marginBottom="50dp"
         android:fontFamily="sans-serif"
-        android:text="@string/tag"
+        android:text="@string/logintag"
         android:textSize="17sp" />
 
     <EditText
@@ -36,7 +36,7 @@
         android:layout_marginRight="20dp"
         android:background="@drawable/et_custom"
         android:fontFamily="sans-serif"
-        android:hint="@string/e_mail"
+        android:hint="@string/email"
         android:inputType="textEmailAddress"
         android:padding="15dp"
         android:textSize="15sp" />
@@ -70,15 +70,25 @@
         android:textColor="@android:color/white" />
 
     <TextView
-        android:id="@+id/swipeRight"
+        android:id="@+id/registerhere"
         android:textColor="@color/colorHyperlink"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="425dp"
+        android:layout_marginTop="440dp"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:fontFamily="sans-serif"
         android:text="@string/not_registered"
         android:textSize="15sp" />
+
+    <ProgressBar
+        android:id="@+id/loginprogressbar"
+        style="?android:attr/progressBarStyle"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>

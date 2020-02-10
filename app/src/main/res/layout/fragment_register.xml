@@ -26,11 +26,11 @@
         android:layout_marginStart="25dp"
         android:layout_marginBottom="50dp"
         android:fontFamily="sans-serif"
-        android:text="@string/tag"
+        android:text="@string/registertag"
         android:textSize="17sp" />
 
     <EditText
-        android:id="@+id/et_name"
+        android:id="@+id/et_firstname"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="20dp"
@@ -38,8 +38,24 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/et_custom"
         android:fontFamily="sans-serif"
-        android:hint="@string/your_name"
+        android:hint="@string/first_name"
         android:inputType="textPersonName"
+        android:importantForAutofill="no"
+        android:padding="15dp"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/et_lastname"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/et_custom"
+        android:fontFamily="sans-serif"
+        android:hint="@string/last_name"
+        android:inputType="textPersonName"
+        android:importantForAutofill="no"
         android:padding="15dp"
         android:textSize="15sp" />
 
@@ -52,8 +68,9 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/et_custom"
         android:fontFamily="sans-serif"
-        android:hint="@string/e_mail"
+        android:hint="@string/email"
         android:inputType="textEmailAddress"
+        android:importantForAutofill="no"
         android:padding="15dp"
         android:textSize="15sp" />
 
@@ -68,6 +85,7 @@
         android:fontFamily="sans-serif"
         android:hint="@string/password"
         android:inputType="textPassword"
+        android:importantForAutofill="no"
         android:padding="15dp"
         android:textSize="15sp" />
 
@@ -81,6 +99,7 @@
         android:fontFamily="sans-serif"
         android:hint="@string/re_type_password"
         android:inputType="textPassword"
+        android:importantForAutofill="no"
         android:padding="15dp"
         android:textSize="15sp" />
 
@@ -103,14 +122,14 @@
             android:textColor="@android:color/white" />
 
         <TextView
-            android:id="@+id/swipeLeft"
+            android:id="@+id/alreadyregistered"
             android:textColor="@color/colorHyperlink"
             android:clickable="true"
             android:focusable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="75dp"
+            android:layout_marginTop="85dp"
             android:layout_marginBottom="20dp"
             android:fontFamily="sans-serif"
             android:text="@string/already_registered_login"

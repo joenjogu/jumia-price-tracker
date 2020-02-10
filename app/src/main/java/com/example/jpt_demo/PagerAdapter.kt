@@ -17,10 +17,9 @@ class PagerAdapter (fragmanager: FragmentManager) : FragmentPagerAdapter(fragman
         return 3
     }
 
-
     override fun getPageTitle(position: Int): CharSequence? {
         return when (position){
-            0 -> "BROWSER"
+            0 -> "SHOP"
             1 -> "MY TRACKLIST"
             else -> return "ME"
         }
