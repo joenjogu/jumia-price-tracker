@@ -74,9 +74,10 @@ class LoginFragment : Fragment() {
 
         mRegister.setOnClickListener{
             val frag2 = RegisterFragment()
-            val fragmentManager = getFragmentManager()
-            val fragmentTransaction = fragmentManager!!.beginTransaction()
+            val fragmentManager = getActivity()!!.supportFragmentManager
+            val fragmentTransaction = fragmentManager.beginTransaction()
             fragmentTransaction.replace(R.id.mainlayout, frag2)
+            fragmentTransaction.commit()
         }
     }
 }

@@ -22,12 +22,14 @@ class MainActivity : AppCompatActivity() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         val frag1 = LoginFragment()
-
+        val frag2 = RegisterFragment()
         val sharedPreferences : SharedPreferences = this.getSharedPreferences(sharedPrefFile,
             Context.MODE_PRIVATE)
         val loginState = sharedPreferences.getBoolean("login_state_key",false)
 
         if (!loginState){
+            val app_bar = findViewById<View>(R.id.appbarlayout) as View
+            app_bar.setVisibility(View.GONE)
             fab_track.hide()
             fragmentTransaction.add(R.id.mainlayout, frag1)
             fragmentTransaction.commit()

@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 
 /**
@@ -30,11 +33,11 @@ class RegisterFragment : Fragment() {
         val mEmail = view!!.findViewById<View>(R.id.et_email) as EditText
         val mPassword = view!!.findViewById<View>(R.id.et_password) as EditText
         val mRePassword = view!!.findViewById<View>(R.id.et_repassword) as EditText
-        val mProgressbar = view!!.findViewById<View>(R.id.loginprogressbar) as ProgressBar
-        val mLoginbutton = view!!.findViewById<View>(R.id.btn_login) as Button
+//        val mProgressbar = view!!.findViewById<View>(R.id.loginprogressbar) as ProgressBar
+        val mRegisterbutton = view!!.findViewById<View>(R.id.btn_register) as Button
         val mLogin = view!!.findViewById<View>(R.id.alreadyregistered) as TextView
 
-        mLoginbutton.setOnClickListener {
+        mRegisterbutton.setOnClickListener {
             val firstname = mFirstName.text.toString().trim()
             val lastname = mLastName.text.toString().trim()
             val email = mEmail.text.toString().trim()
@@ -63,7 +66,7 @@ class RegisterFragment : Fragment() {
                 mRePassword.setError("Passwords do not match!")
             }
 
-            mProgressbar.setVisibility (View.VISIBLE)
+//            mProgressbar.setVisibility (View.VISIBLE)
 
             if (mFirstName.error.isNullOrEmpty()
                 && mLastName.error.isNullOrEmpty()
@@ -76,7 +79,7 @@ class RegisterFragment : Fragment() {
                 mPassword.text.clear()
                 mRePassword.text.clear()
                 Toast.makeText(context,"Registration Successful", Toast.LENGTH_SHORT).show()
-                mProgressbar.setVisibility (View.GONE)
+//                mProgressbar.setVisibility (View.GONE)
                 startActivity(Intent(context,MainActivity::class.java))
             } else {
                 Toast.makeText(context, " Registration Error! Try Again" , Toast.LENGTH_SHORT).show()
@@ -84,7 +87,11 @@ class RegisterFragment : Fragment() {
         }
 
         mLogin.setOnClickListener{
-            startActivity(Intent(context,LoginFragment::class.java))
+            val frag1 = LoginFragment()
+            val fragmentManager = getActivity()!!.supportFragmentManager
+            val fragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.mainlayout, frag1)
+            fragmentTransaction.commit()
         }
     }
 }
