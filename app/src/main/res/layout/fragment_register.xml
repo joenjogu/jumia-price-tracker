@@ -137,4 +137,12 @@
 
     </RelativeLayout>
 
+    <ProgressBar
+        android:id="@+id/registerprogressbar"
+        style="?android:attr/progressBarStyle"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
 </LinearLayout>

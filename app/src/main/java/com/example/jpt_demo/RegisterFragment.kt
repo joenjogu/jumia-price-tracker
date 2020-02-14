@@ -3,19 +3,20 @@ package com.example.jpt_demo
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
 
 /**
  * A simple [Fragment] subclass.
  */
 class RegisterFragment : Fragment() {
+
+    private lateinit var mAuth : FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,12 +29,13 @@ class RegisterFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        mAuth = FirebaseAuth.getInstance()
+
         val mFirstName = view!!.findViewById<View>(R.id.et_firstname) as EditText
         val mLastName = view!!.findViewById<View>(R.id.et_lastname) as EditText
         val mEmail = view!!.findViewById<View>(R.id.et_email) as EditText
         val mPassword = view!!.findViewById<View>(R.id.et_password) as EditText
         val mRePassword = view!!.findViewById<View>(R.id.et_repassword) as EditText
-//        val mProgressbar = view!!.findViewById<View>(R.id.loginprogressbar) as ProgressBar
         val mRegisterbutton = view!!.findViewById<View>(R.id.btn_register) as Button
         val mLogin = view!!.findViewById<View>(R.id.alreadyregistered) as TextView
 
@@ -53,6 +55,9 @@ class RegisterFragment : Fragment() {
             if (email.isEmpty()){
                 mEmail.setError("Email is required!")
             }
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                mEmail.setError("Invalid Email Type")
+            }
             if (password.isEmpty()){
                 mPassword.setError("Please enter password!")
             }
@@ -66,21 +71,19 @@ class RegisterFragment : Fragment() {
                 mRePassword.setError("Passwords do not match!")
             }
 
-//            mProgressbar.setVisibility (View.VISIBLE)
-
             if (mFirstName.error.isNullOrEmpty()
                 && mLastName.error.isNullOrEmpty()
                 && mEmail.error.isNullOrEmpty()
                 && mPassword.error.isNullOrEmpty()
                 && mRePassword.error.isNullOrEmpty()){
+
+                registerUser(email,password)
+
                 mFirstName.text.clear()
                 mLastName.text.clear()
                 mEmail.text.clear()
                 mPassword.text.clear()
                 mRePassword.text.clear()
-                Toast.makeText(context,"Registration Successful", Toast.LENGTH_SHORT).show()
-//                mProgressbar.setVisibility (View.GONE)
-                startActivity(Intent(context,MainActivity::class.java))
             } else {
                 Toast.makeText(context, " Registration Error! Try Again" , Toast.LENGTH_SHORT).show()
             }
@@ -92,6 +95,20 @@ class RegisterFragment : Fragment() {
             val fragmentTransaction = fragmentManager.beginTransaction()
             fragmentTransaction.replace(R.id.mainlayout, frag1)
             fragmentTransaction.commit()
+        }
+    }
+
+    private fun registerUser(email: String, password: String) {
+        val mProgressbar = view!!.findViewById<View>(R.id.registerprogressbar) as ProgressBar
+        mProgressbar.visibility = View.VISIBLE
+        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener {
+            mProgressbar.visibility = View.GONE
+            if (it.isSuccessful){
+                Toast.makeText(context,"Registration Successful", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(context,MainActivity::class.java))
+            } else {
+                Toast.makeText(context,it.exception?.message, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
