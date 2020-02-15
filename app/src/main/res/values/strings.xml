@@ -22,4 +22,5 @@
     <string name="current_price_ksh">Current Price: Ksh</string>
     <string name="previous_price_ksh">Previous Price: Ksh</string>
     <string name="seller">Seller</string>
+    <string name="verify">verify</string>
 </resources>

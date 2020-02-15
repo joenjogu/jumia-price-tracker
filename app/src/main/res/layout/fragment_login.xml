@@ -5,10 +5,20 @@
     android:layout_height="match_parent"
     tools:context=".LoginFragment">
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/loginicon"
+        android:src="@drawable/man_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"/>
+
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_above="@id/tv_subtitle"
         android:layout_marginStart="25dp"
         android:layout_marginBottom="10dp"
@@ -22,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/et_email"
         android:layout_marginStart="25dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
         android:fontFamily="sans-serif"
         android:text="@string/logintag"
         android:textSize="17sp" />

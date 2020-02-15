@@ -7,6 +7,13 @@
     android:orientation="vertical"
     tools:context=".RegisterFragment">
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/loginicon"
+        android:src="@drawable/man_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"/>
+
     <TextView
         android:id="@+id/tv_logo"
         android:layout_width="wrap_content"
@@ -14,17 +21,16 @@
         android:text="@string/register"
         android:textAlignment="center"
         android:textSize="50sp"
-        android:layout_marginStart="25dp"
+        android:layout_gravity="center"
         android:layout_marginBottom="5dp"
-        android:fontFamily="sans-serif"
-        android:layout_marginTop="60dp"/>
+        android:fontFamily="sans-serif" />
 
     <TextView
         android:id="@+id/tv_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
         android:fontFamily="sans-serif"
         android:text="@string/registertag"
         android:textSize="17sp" />
@@ -135,14 +141,14 @@
             android:text="@string/already_registered_login"
             android:textSize="15sp" />
 
-    </RelativeLayout>
+        <ProgressBar
+            android:id="@+id/registerprogressbar"
+            style="?android:attr/progressBarStyle"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"/>
 
-    <ProgressBar
-        android:id="@+id/registerprogressbar"
-        style="?android:attr/progressBarStyle"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+    </RelativeLayout>
 
 </LinearLayout>

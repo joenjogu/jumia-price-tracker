@@ -6,6 +6,7 @@ import android.view.*
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.fragment_webview.*
 
 /**
  * A simple [Fragment] subclass.
@@ -19,6 +20,7 @@ class FragmentWebview : Fragment() {
         val v = inflater.inflate(R.layout.fragment_webview, container, false)
 
         val mWebView = v.findViewById<View>(R.id.webView) as WebView
+
         mWebView.loadUrl("https://jumia.co.ke")
 
         // Enable Javascript
@@ -40,8 +42,17 @@ class FragmentWebview : Fragment() {
             }
             false
         })
+
         // Inflate the layout for this fragment
         return v
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        webviewswiperefresh.setOnRefreshListener{
+            webView.loadUrl("https://jumia.co.ke")
+        }
     }
 
 }
