@@ -33,7 +33,9 @@
         android:autoSizeTextType="uniform" />
 
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_verify"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_gravity="center"
         android:layout_width="200dp"
         android:layout_height="wrap_content"

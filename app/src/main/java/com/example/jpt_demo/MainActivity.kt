@@ -9,20 +9,22 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private val sharedPrefFile = "LoginPrefFile"
+    private lateinit var mAuth : FirebaseAuth
+    val fragmentManager = supportFragmentManager
+    val fragmentTransaction = fragmentManager.beginTransaction()
+    val frag1 = LoginFragment()
+    val frag2 = RegisterFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        val frag1 = LoginFragment()
-        val frag2 = RegisterFragment()
         val sharedPreferences : SharedPreferences = this.getSharedPreferences(sharedPrefFile,
             Context.MODE_PRIVATE)
         val loginState = sharedPreferences.getBoolean("login_state_key",false)
@@ -111,19 +113,19 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences : SharedPreferences = this.getSharedPreferences(sharedPrefFile,
             Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = sharedPreferences.edit()
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        val frag1 = LoginFragment()
         val logoutdialog = AlertDialog.Builder(context)
         logoutdialog.setMessage(message)
         logoutdialog.setNegativeButton("Cancel") { _, _ ->
 
         }
         logoutdialog.setPositiveButton("Logout") { _, _ ->
+            FirebaseAuth.getInstance().signOut()
             editor.clear()
             editor.apply()
             editor.commit()
-            this.finish()
+            appbarlayout.visibility = View.GONE
+            fragmentTransaction.replace(R.id.mainlayout,frag1)
+            fragmentTransaction.commit()
         }
         logoutdialog.create().show()
     }
