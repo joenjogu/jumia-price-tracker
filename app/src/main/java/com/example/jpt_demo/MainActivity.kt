@@ -7,10 +7,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.productimage.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -69,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             fab_track.setOnClickListener {
                 showProductDialog(
                     "Track this item?",
-                    "Product Info and image Here", this
+                     this
                 )
             }
         }
@@ -95,10 +98,18 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun showProductDialog(title: String, message: String, context: Context) {
+    private fun showProductDialog(title: String, context: Context) {
         val productdialog = AlertDialog.Builder(context)
+        val infl = layoutInflater
+        val vyu = infl.inflate(R.layout.productimage,null)
+        val prodimage = vyu.imagefromurl
+        val url = "https://ke.jumia.is/unsafe/fit-in/680x680/filters:fill(white)/product/22/58921/1.jpg?1720"
+        if (prodimage!=null) {
+            Glide.with(this).load(url).placeholder(R.drawable.loading_image_placeholder).into(prodimage)
+            Toast.makeText(this,"Image Downloaded",Toast.LENGTH_SHORT).show()
+        }
         productdialog.setTitle(title)
-        productdialog.setMessage(message)
+        productdialog.setView(vyu)
         productdialog.setNegativeButton("Cancel") { _, _ ->
 
         }
