@@ -14,10 +14,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
  */
 class FragmentWebview : Fragment() {
 
+    private lateinit var webviewcallback : WebviewCallback
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val v = inflater.inflate(R.layout.fragment_webview, container, false)
 
         val mWebView = v.findViewById<View>(R.id.webView) as WebView
@@ -55,10 +58,5 @@ class FragmentWebview : Fragment() {
         // Inflate the layout for this fragment
         return v
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
 }
 

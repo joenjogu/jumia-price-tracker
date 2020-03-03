@@ -9,14 +9,24 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_webview.*
 import kotlinx.android.synthetic.main.productimage.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.jsoup.Jsoup
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), LifecycleOwner {
 
+    private lateinit var viewmodel : ProductsViewModel
     private val sharedPrefFile = "LoginPrefFile"
     private lateinit var mAuth : FirebaseAuth
     val fragmentManager = supportFragmentManager
@@ -28,13 +38,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        viewmodel = ViewModelProvider(this).get(ProductsViewModel::class.java)
+
+
         val sharedPreferences : SharedPreferences = this.getSharedPreferences(sharedPrefFile,
             Context.MODE_PRIVATE)
         val loginState = sharedPreferences.getBoolean("login_state_key",false)
 
         if (!loginState){
-            val app_bar = findViewById<View>(R.id.appbarlayout) as View
-            app_bar.setVisibility(View.GONE)
+            val appbar = findViewById<View>(R.id.appbarlayout) as View
+            appbar.setVisibility(View.GONE)
             fab_track.hide()
             fragmentTransaction.add(R.id.mainlayout, frag1)
             fragmentTransaction.commit()
@@ -102,18 +115,62 @@ class MainActivity : AppCompatActivity() {
         val productdialog = AlertDialog.Builder(context)
         val infl = layoutInflater
         val vyu = infl.inflate(R.layout.productimage,null)
-        val prodimage = vyu.imagefromurl
-        val url = "https://ke.jumia.is/unsafe/fit-in/680x680/filters:fill(white)/product/22/58921/1.jpg?1720"
-        if (prodimage!=null) {
-            Glide.with(this).load(url).placeholder(R.drawable.loading_image_placeholder).into(prodimage)
-            Toast.makeText(this,"Image Downloaded",Toast.LENGTH_SHORT).show()
+        val prodimage = vyu.dialogprodimage
+        val prodprice = vyu.dialogprodcurrentprice
+        val prodseller = vyu.dialogprodseller
+        val prodname = vyu.dialogprodname
+
+        val url = webView.url
+        Toast.makeText(this,url,Toast.LENGTH_LONG).show()
+
+        suspend fun getDetails(url : String) {
+            var resarr = arrayOf("")
+            withContext(Dispatchers.IO) {
+                val doc = Jsoup.connect(url).get()
+                try {
+                    val prodName = doc.select("h1.-fs20").text()
+                    val sellerName = doc.select("p.-m").first().text()
+                    val price = doc.select("span[data-price]").select(".-fs24").text()
+                    val imgurl = doc.select("img[data-lazy-slide]").attr("data-src")
+
+                    resarr = arrayOf(prodName,sellerName,price,imgurl)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                withContext(Dispatchers.Main){
+                    prodname.text =resarr[0]
+                    prodseller.text = resarr[1]
+                    prodprice.text = resarr[2]
+                    Glide.with(this@MainActivity).load(resarr[3]).into(prodimage)
+                }
+            }
         }
+
+        CoroutineScope(Dispatchers.Main).launch { getDetails(url) }
         productdialog.setTitle(title)
         productdialog.setView(vyu)
+
+        viewmodel.result.observe(this, Observer {
+            val message = if (it == null){
+                Toast.makeText(this,"Product Added Successfully",Toast.LENGTH_SHORT).show()
+            }else {
+                Toast.makeText(this,it.message,Toast.LENGTH_SHORT).show()
+            }
+        })
+
         productdialog.setNegativeButton("Cancel") { _, _ ->
 
         }
-        productdialog.setPositiveButton("Confirm") { _, _ ->
+        productdialog.setPositiveButton("Confirm") { _, _->
+            val regex = """[^0-9]"""
+            val prodPrice = prodprice.text.trim().replace(regex.toRegex(),"").toInt()
+            val product = Product()
+            product.productname = prodname.text.toString()
+            product.seller = prodseller.text.toString()
+            product.previousprice = prodPrice
+            product.imageurl = url
+
+            viewmodel.addProduct(product)
 
         }
         productdialog.create().show()
