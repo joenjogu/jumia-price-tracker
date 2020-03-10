@@ -1,8 +1,11 @@
 package com.example.jpt_demo
 
 import android.app.AlertDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -16,6 +19,7 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,18 +35,17 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
     private lateinit var viewmodel : ProductsViewModel
     private val sharedPrefFile = "LoginPrefFile"
-    private lateinit var mAuth : FirebaseAuth
-    val fragmentManager = supportFragmentManager
-    val fragmentTransaction = fragmentManager.beginTransaction()
-    val frag1 = LoginFragment()
-    val frag2 = RegisterFragment()
+    private val fragmentManager = supportFragmentManager
+    private val fragmentTransaction = fragmentManager.beginTransaction()
+    private val frag1 = LoginFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewmodel = ViewModelProvider(this).get(ProductsViewModel::class.java)
+        createNotificationChannel()
 
+        viewmodel = ViewModelProvider(this).get(ProductsViewModel::class.java)
 
         val sharedPreferences : SharedPreferences = this.getSharedPreferences(sharedPrefFile,
             Context.MODE_PRIVATE)
@@ -54,7 +57,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             .setConstraints(constraints)
             .build()
 
-//        WorkManager.getInstance(this).enqueue(getprice)
+        WorkManager.getInstance(this).enqueue(getprice)
 
         if (!loginState){
             val appbar = findViewById<View>(R.id.appbarlayout) as View
@@ -162,7 +165,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         productdialog.setView(vyu)
 
         viewmodel.result.observe(this, Observer {
-            val message = if (it == null){
+            if (it == null){
                 Toast.makeText(this,"Product Added Successfully",Toast.LENGTH_SHORT).show()
             }else {
                 Toast.makeText(this,it.message,Toast.LENGTH_SHORT).show()
@@ -207,5 +210,20 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             fragmentTransaction.commit()
         }
         logoutdialog.create().show()
+    }
+
+    private fun createNotificationChannel () {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val name = getString(R.string.channel_name)
+            val descriptionText = getString(R.string.channel_description)
+            val channel = NotificationChannel(CHANNEL_ID,name,importance).apply {
+                description = descriptionText
+            }
+
+            val notificationManager : NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.createNotificationChannel(channel)
+        }
     }
 }
