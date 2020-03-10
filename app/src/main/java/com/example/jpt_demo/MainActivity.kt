@@ -13,6 +13,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
@@ -44,6 +47,14 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         val sharedPreferences : SharedPreferences = this.getSharedPreferences(sharedPrefFile,
             Context.MODE_PRIVATE)
         val loginState = sharedPreferences.getBoolean("login_state_key",false)
+
+        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+
+        val getprice = OneTimeWorkRequestBuilder<TrackPrice>()
+            .setConstraints(constraints)
+            .build()
+
+//        WorkManager.getInstance(this).enqueue(getprice)
 
         if (!loginState){
             val appbar = findViewById<View>(R.id.appbarlayout) as View

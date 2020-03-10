@@ -13,9 +13,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
  * A simple [Fragment] subclass.
  */
 class FragmentWebview : Fragment() {
-
-    private lateinit var webviewcallback : WebviewCallback
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
