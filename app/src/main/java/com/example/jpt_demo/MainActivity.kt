@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
 
-        val getprice = PeriodicWorkRequestBuilder<TrackPrice>(10,TimeUnit.MINUTES)
+        val getprice = PeriodicWorkRequestBuilder<TrackPrice>(5,TimeUnit.HOURS)
             .setConstraints(constraints)
             .build()
 
@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
     private fun createNotificationChannel () {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val importance = NotificationManager.IMPORTANCE_HIGH
             val name = getString(R.string.channel_name)
             val descriptionText = getString(R.string.channel_description)
             val channel = NotificationChannel(CHANNEL_ID,name,importance).apply {
