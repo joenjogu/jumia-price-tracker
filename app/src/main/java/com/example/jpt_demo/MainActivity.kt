@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,10 +17,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
@@ -30,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), LifecycleOwner {
 
@@ -53,11 +52,19 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
 
-        val getprice = OneTimeWorkRequestBuilder<TrackPrice>()
+        val getprice = PeriodicWorkRequestBuilder<TrackPrice>(10,TimeUnit.MINUTES)
             .setConstraints(constraints)
             .build()
 
-        WorkManager.getInstance(this).enqueue(getprice)
+        WorkManager.getInstance(this)
+            .enqueueUniquePeriodicWork("Price Tracker",ExistingPeriodicWorkPolicy.REPLACE,getprice)
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(getprice.id)
+            .observe(this, Observer {workInfo ->
+                if (workInfo != null && workInfo.state == WorkInfo.State.RUNNING){
+                    Toast.makeText(this,"Price Tracking Running",Toast.LENGTH_LONG).show()
+                    Log.i("Working","Price Tracking Running")
+                }
+            })
 
         if (!loginState){
             val appbar = findViewById<View>(R.id.appbarlayout) as View
@@ -98,7 +105,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
             fab_track.setOnClickListener {
                 showProductDialog(
-                    "Track this item?",
+                    "TRACK THIS ITEM?",
                      this
                 )
             }
@@ -133,9 +140,9 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         val prodprice = vyu.dialogprodcurrentprice
         val prodseller = vyu.dialogprodseller
         val prodname = vyu.dialogprodname
+        val prodImageUrl = vyu.dialogimageurl
 
         val url = webView.url
-        Toast.makeText(this,url,Toast.LENGTH_LONG).show()
 
         suspend fun getDetails(url : String) {
             var resarr = arrayOf("")
@@ -155,6 +162,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                     prodname.text =resarr[0]
                     prodseller.text = resarr[1]
                     prodprice.text = resarr[2]
+                    prodImageUrl.text = resarr[3]
                     Glide.with(this@MainActivity).load(resarr[3]).into(prodimage)
                 }
             }
@@ -182,7 +190,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             product.productname = prodname.text.toString()
             product.seller = prodseller.text.toString()
             product.previousprice = prodPrice
-            product.imageurl = url
+            product.imageurl = prodImageUrl.text.toString()
+            product.producturl = url
 
             viewmodel.addProduct(product)
 

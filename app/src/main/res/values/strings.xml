@@ -25,7 +25,7 @@
     <string name="verify">verify</string>
     <string name="verified">Verified</string>
     <string name="notverified">Not Verified</string>
-    <string name="channel_name">NotificationChannel</string>
+    <string name="channel_name">Price Drop Alert</string>
     <string name="channel_description">This channel alerts user of a price drop</string>
     <string name="price_drop_alert">Price Drop Detected</string>
 </resources>
