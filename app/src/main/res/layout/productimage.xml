@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootlayout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/dialogprodimage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/dialogprodname"
+        android:layout_margin="3dp"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+    <TextView
+        android:id="@+id/dialogprodseller"
+        android:layout_margin="3dp"
+        android:textSize="14sp"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
+
+    <TextView
+        android:id="@+id/dialogprodcurrentprice"
+        android:layout_margin="3dp"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+    <TextView
+        android:id="@+id/dialogimageurl"
+        android:textSize="12sp"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:visibility="invisible"/>
+
+</LinearLayout>

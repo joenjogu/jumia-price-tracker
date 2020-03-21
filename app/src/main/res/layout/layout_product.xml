@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp">
+
+            <RelativeLayout
+                android:background="@android:color/white"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/productimage"
+                    android:contentDescription="@string/product_image"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerInside"/>
+
+                <LinearLayout
+                    android:layout_width="291dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="-6dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_toEndOf="@+id/productimage"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_productname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:fontFamily="sans-serif"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="#031D27"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tv_seller"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="#2196F3"
+                        android:textSize="14sp"
+                        android:text="@string/by"/>
+
+                    <TextView
+                        android:id="@+id/tv_previousprice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="#F44336"
+                        android:textSize="18sp"
+                        android:text="@string/previous_price_ksh"/>
+
+                    <TextView
+                        android:id="@+id/tv_currentprice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="#00FF55"
+                        android:textSize="18sp"
+                        android:text="@string/current_price_ksh"/>
+
+                    <TextView
+                        android:id="@+id/tv_targetprice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="#00FF55"
+                        android:textSize="18sp"
+                        android:text="@string/target_price"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/button_container"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_gravity="bottom">
+
+            <Button
+                android:id="@+id/btn_target_price"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/target_price"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_marginStart="5dp"
+                android:layout_width="150dp"
+                android:layout_height="match_parent" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btn_product_delete"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/delete_item"
+                android:background="@color/colorAccent"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_marginEnd="5dp"
+                android:layout_gravity="end"
+                android:layout_width="150dp"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
