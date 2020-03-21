@@ -19,8 +19,8 @@
     <string name="logintag">LogIn to track the price of your favorite items</string>
     <string name="product_image">product image</string>
     <string name="by">by</string>
-    <string name="current_price_ksh">Current Price: Ksh</string>
-    <string name="previous_price_ksh">Previous Price: Ksh</string>
+    <string name="current_price_ksh">Current Price: Ksh.</string>
+    <string name="previous_price_ksh">Previous Price: Ksh.</string>
     <string name="seller">Seller</string>
     <string name="verify">verify</string>
     <string name="verified">Verified</string>
@@ -28,4 +28,11 @@
     <string name="channel_name">Price Drop Alert</string>
     <string name="channel_description">This channel alerts user of a price drop</string>
     <string name="price_drop_alert">Price Drop Detected</string>
+    <string name="delete_item">Delete Item</string>
+    <string name="target_price">Target Price</string>
+    <string name="delete_confirmation">Are You Sure?</string>
+    <string name="yes">Yes</string>
+    <string name="set_target_price">Set Target Price</string>
+    <string name="enter_desired_target_price">Enter desired target price</string>
+    <string name="set_price">SET PRICE</string>
 </resources>

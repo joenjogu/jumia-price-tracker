@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_tracklist.*
 /**
  * A simple [Fragment] subclass.
  */
-class FragmentTracklist : Fragment() {
+class FragmentTracklist : Fragment(), RecyclerViewClickListener{
 
     private lateinit var viewModel : ProductsViewModel
     private val adapter = ProductAdapter()
@@ -36,6 +37,7 @@ class FragmentTracklist : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         productrecyclerview.adapter = adapter
+        adapter.listener = this
 
         viewModel.fetchProducts()
         viewModel.getRealtimeUpdates()
@@ -51,5 +53,20 @@ class FragmentTracklist : Fragment() {
         productrecyclerview.layoutManager = LinearLayoutManager(context)
     }
 
+    override fun itemClicked(view: View, product: Product) {
+        when (view.id){
+            R.id.btn_target_price ->{
+                FragmentSetTargetPrice(product).show(childFragmentManager,"")
+            }
 
+            R.id.btn_product_delete ->{
+                AlertDialog.Builder(requireContext()).also {
+                    it.setTitle(getString(R.string.delete_confirmation))
+                    it.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        viewModel.deleteProduct(product)
+                    }
+                }.create().show()
+            }
+        }
+    }
 }

@@ -102,8 +102,13 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             })
 
             val fab_track = findViewById<View>(R.id.fab_track)
-
+//            if ((webView.url).endsWith("html")) {
+//                fab_track.isClickable = true
+//            }
             fab_track.setOnClickListener {
+                if ((webView.url).endsWith("html")) {
+                    fab_track.isClickable = true
+                }
                 showProductDialog(
                     "TRACK THIS ITEM?",
                      this
