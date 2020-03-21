@@ -121,6 +121,7 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
 
     private fun showPriceDropNotification
                 (notificationProduct: String,notificationCurrPrice : String,notificationPrevPrice : String){
+
         val notificationText =
             "The price of $notificationProduct has dropped from $notificationPrevPrice to $notificationCurrPrice"
 
