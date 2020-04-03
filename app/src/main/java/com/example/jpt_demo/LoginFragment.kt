@@ -5,13 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 /**
  * A simple [Fragment] subclass.
@@ -19,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth
 class LoginFragment : Fragment() {
 
     private lateinit var mAuth : FirebaseAuth
+    private lateinit var viewmodel : ProductsViewModel
+    private val user = User()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +37,7 @@ class LoginFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        viewmodel = ViewModelProvider(this).get(ProductsViewModel::class.java)
         mAuth = FirebaseAuth.getInstance()
 
         val mEmail = view!!.findViewById<View>(R.id.et_email) as EditText
@@ -89,6 +95,11 @@ class LoginFragment : Fragment() {
                 editor.apply()
                 editor.commit()
                 Toast.makeText(context,"Login Successful",Toast.LENGTH_SHORT).show()
+                FirebaseDatabase.getInstance().setPersistenceEnabled(true)
+                val currentUserId = mAuth.currentUser?.uid
+                user.userid = currentUserId
+                Log.i("userid", "${user.userid}")
+                viewmodel.addUser(user)
                 startActivity(Intent(context,MainActivity::class.java))
             } else {
                 Toast.makeText(context,it.exception?.message, Toast.LENGTH_SHORT).show()

@@ -20,7 +20,6 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import androidx.work.*
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_webview.*
 import kotlinx.android.synthetic.main.productimage.view.*
@@ -43,8 +42,6 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
         createNotificationChannel()
 
@@ -78,10 +75,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             fragmentTransaction.commit()
         }else {
 
-            val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
-            user.userid = currentUserId
-
-            viewmodel.addUser(user)
+//            viewmodel.addUser(user)
 
             toolbar.setTitle("Jumia Price Tracker")
             setSupportActionBar(toolbar)
@@ -208,6 +202,9 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             product.previousprice = prodPrice
             product.imageurl = prodImageUrl.text.toString()
             product.producturl = url
+
+            val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+            user.userid = currentUserId
 
             viewmodel.addProduct(product,user)
 
