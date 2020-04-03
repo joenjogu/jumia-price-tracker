@@ -73,7 +73,7 @@
                         android:layout_marginStart="5dp"
                         android:gravity="start"
                         android:padding="5dp"
-                        android:textColor="#00FF55"
+                        android:textColor="#2196F3"
                         android:textSize="18sp"
                         android:text="@string/current_price_ksh"/>
 
@@ -84,7 +84,7 @@
                         android:layout_marginStart="5dp"
                         android:gravity="start"
                         android:padding="5dp"
-                        android:textColor="#00FF55"
+                        android:textColor="#2196F3"
                         android:textSize="18sp"
                         android:text="@string/target_price"/>
 

@@ -4,5 +4,5 @@ import android.view.View
 
 interface RecyclerViewClickListener {
 
-    fun itemClicked(view : View, product: Product)
+    fun itemClicked(view : View, product: Product, user: User)
 }

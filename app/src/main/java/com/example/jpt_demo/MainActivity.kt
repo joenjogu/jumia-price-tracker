@@ -20,6 +20,7 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import androidx.work.*
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_webview.*
 import kotlinx.android.synthetic.main.productimage.view.*
@@ -37,10 +38,13 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     private val fragmentManager = supportFragmentManager
     private val fragmentTransaction = fragmentManager.beginTransaction()
     private val frag1 = LoginFragment()
+    private val user = User()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
         createNotificationChannel()
 
@@ -57,7 +61,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             .build()
 
         WorkManager.getInstance(this)
-            .enqueueUniquePeriodicWork("Price Tracker",ExistingPeriodicWorkPolicy.REPLACE,getprice)
+            .enqueueUniquePeriodicWork("Price Tracker",ExistingPeriodicWorkPolicy.KEEP,getprice)
         WorkManager.getInstance(this).getWorkInfoByIdLiveData(getprice.id)
             .observe(this, Observer {workInfo ->
                 if (workInfo != null && workInfo.state == WorkInfo.State.RUNNING){
@@ -73,6 +77,11 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             fragmentTransaction.add(R.id.mainlayout, frag1)
             fragmentTransaction.commit()
         }else {
+
+            val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+            user.userid = currentUserId
+
+            viewmodel.addUser(user)
 
             toolbar.setTitle("Jumia Price Tracker")
             setSupportActionBar(toolbar)
@@ -102,17 +111,15 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             })
 
             val fab_track = findViewById<View>(R.id.fab_track)
-//            if ((webView.url).endsWith("html")) {
-//                fab_track.isClickable = true
-//            }
             fab_track.setOnClickListener {
                 if ((webView.url).endsWith("html")) {
-                    fab_track.isClickable = true
+                    showProductDialog(
+                        "TRACK THIS ITEM?",
+                        this
+                    )
+                }else {
+                    Toast.makeText(this,getString(R.string.no_item_alert),Toast.LENGTH_LONG).show()
                 }
-                showProductDialog(
-                    "TRACK THIS ITEM?",
-                     this
-                )
             }
         }
     }
@@ -131,7 +138,11 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                 )
             }
             R.id.settings -> {
-
+//                appbarlayout.visibility = View.GONE
+                fab_track.hide()
+                fragmentTransaction.replace(R.id.mainlayout,FragmentSettings())
+                fragmentTransaction.addToBackStack("frag")
+                fragmentTransaction.commit()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -179,7 +190,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         viewmodel.result.observe(this, Observer {
             if (it == null){
-                Toast.makeText(this,"Product Added Successfully",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"Added Successfully",Toast.LENGTH_SHORT).show()
             }else {
                 Toast.makeText(this,it.message,Toast.LENGTH_SHORT).show()
             }
@@ -198,7 +209,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             product.imageurl = prodImageUrl.text.toString()
             product.producturl = url
 
-            viewmodel.addProduct(product)
+            viewmodel.addProduct(product,user)
 
         }
         productdialog.create().show()

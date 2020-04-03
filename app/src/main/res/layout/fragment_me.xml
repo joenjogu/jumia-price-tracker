@@ -22,7 +22,7 @@
         android:layout_gravity="center"
         android:layout_margin="20dp"
         android:background="@drawable/et_custom"
-        android:autoSizeTextType="uniform" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/mefragverificationstatus"
@@ -30,7 +30,7 @@
         android:layout_height="50dp"
         android:layout_margin="20dp"
         android:background="@drawable/et_custom"
-        android:autoSizeTextType="uniform" />
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/btn_verify"

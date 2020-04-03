@@ -1,5 +1,6 @@
 package com.example.jpt_demo
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,11 +22,8 @@ class ProductsViewModel : ViewModel() {
     val result : LiveData<Exception?>
         get() = _result
 
-    fun addProduct (product: Product){
-
-        product.id = dbProducts.push().key
-
-        dbProducts.child(product.id!!).setValue(product)
+    fun addUser (user: User){
+        dbProducts.child(user.userid!!).setValue(null)
             .addOnCompleteListener {
                 if (it.isSuccessful){
                     _result.value = null
@@ -35,10 +33,22 @@ class ProductsViewModel : ViewModel() {
             }
     }
 
-    fun deleteProduct (product: Product){
-        product.id = dbProducts.push().key
+    fun addProduct (product: Product, user: User){
 
-        dbProducts.child(product.id!!).setValue(null)
+        product.id = dbProducts.child(user.userid!!).push().key
+
+        dbProducts.child(user.userid!!).child(product.id!!).setValue(product)
+                .addOnCompleteListener {
+                    if (it.isSuccessful){
+                        _result.value = null
+                    }else {
+                        _result.value = it.exception
+                    }
+                }
+    }
+
+    fun deleteProduct (product: Product, user: User){
+        dbProducts.child(user.userid!!).child(product.id!!).setValue(null)
             .addOnCompleteListener {
                 if (it.isSuccessful){
                     _result.value = null
@@ -73,23 +83,27 @@ class ProductsViewModel : ViewModel() {
         }
     }
 
-    fun getRealtimeUpdates(){
-        dbProducts.addChildEventListener(childEventListener)
+    fun getRealtimeUpdates(user: User){
+        dbProducts.child(user.userid!!).addChildEventListener(childEventListener)
     }
 
-    fun fetchProducts (){
-        dbProducts.addListenerForSingleValueEvent(object : ValueEventListener{
+    fun fetchProducts (prod: Product, user: User){
+        dbProducts.child(user.userid!!)
+            .addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
 
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
+                Log.d("prod","onDataChange")
                 if (snapshot.exists()){
+                    Log.d("prod","snapshot exists")
                     val products = mutableListOf<Product>()
                     for (productSnapshot in snapshot.children){
                         val product = productSnapshot.getValue(Product::class.java)
                         product?.id = productSnapshot.key
                         product?.let { products.add(it) }
+                        Log.d("prod","found products: $products ")
                     }
                     _products.value = products
                 }

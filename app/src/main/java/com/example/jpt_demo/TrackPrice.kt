@@ -15,7 +15,7 @@ import org.jsoup.Jsoup
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
 
-class TrackPrice (appContext: Context, workerParams: WorkerParameters)
+class TrackPrice (appContext: Context, workerParams: WorkerParameters, private val user: User)
     : Worker(appContext, workerParams) {
 
     private val dbProducts = FirebaseDatabase.getInstance().getReference(NODE_PRODUCTS)
@@ -24,7 +24,7 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
 
     override fun doWork(): Result {
 
-        dbProducts.addListenerForSingleValueEvent(object : ValueEventListener{
+        dbProducts.child(user.userid!!).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
                 latch.countDown()
             }
@@ -65,12 +65,13 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
                     showPriceDropNotification(notificationProduct,notificationCurrPrice,notificationPrevPrice)
 
                     fun setCurrentPrice (){
-                        val product = Product(products[position].id,products[position].productname,
+                        val product = Product(products[position].id,
+                            products[position].productname,
                             products[position].seller,currPrice,products[position].previousprice,
                             products[position].targetprice,products[position].producturl,
                             products[position].imageurl)
 
-                        dbProducts.child(products[position].id!!)
+                        dbProducts.child(user.userid!!).child(products[position].id!!)
                             .setValue(product)
                             .addOnCompleteListener {
                                 if (it.isSuccessful){

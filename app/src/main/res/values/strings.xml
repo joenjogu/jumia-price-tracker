@@ -19,8 +19,8 @@
     <string name="logintag">LogIn to track the price of your favorite items</string>
     <string name="product_image">product image</string>
     <string name="by">by</string>
-    <string name="current_price_ksh">Current Price: Ksh.</string>
-    <string name="previous_price_ksh">Previous Price: Ksh.</string>
+    <string name="current_price_ksh">Current Price: Ksh. %1$d</string>
+    <string name="previous_price_ksh">Previous Price: Ksh. %1$d</string>
     <string name="seller">Seller</string>
     <string name="verify">verify</string>
     <string name="verified">Verified</string>
@@ -35,4 +35,9 @@
     <string name="set_target_price">Set Target Price</string>
     <string name="enter_desired_target_price">Enter desired target price</string>
     <string name="set_price">SET PRICE</string>
+    <string name="settings_title">SETTINGS</string>
+    <string name="allow_notifications">Allow Notifications</string>
+    <string name="back_button">back_button</string>
+    <string name="about_section_title">About</string>
+    <string name="no_item_alert">Please select an item to track</string>
 </resources>

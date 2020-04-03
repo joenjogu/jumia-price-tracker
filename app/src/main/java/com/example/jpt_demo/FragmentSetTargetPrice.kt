@@ -19,7 +19,7 @@ import java.util.concurrent.CountDownLatch
 /**
  * A simple [Fragment] subclass.
  */
-class FragmentSetTargetPrice (private val product: Product): DialogFragment() {
+class FragmentSetTargetPrice (private val product: Product,private val user: User): DialogFragment() {
 
     private lateinit var viewmodel : ProductsViewModel
     private val dbProducts = FirebaseDatabase.getInstance().getReference(NODE_PRODUCTS)
@@ -43,7 +43,7 @@ class FragmentSetTargetPrice (private val product: Product): DialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        dbProducts.addListenerForSingleValueEvent(object : ValueEventListener {
+        dbProducts.child(user.userid!!).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 latch.countDown()
             }
@@ -75,10 +75,11 @@ class FragmentSetTargetPrice (private val product: Product): DialogFragment() {
                 products[0].seller,products[0].currentprice,products[0].previousprice,
                 targetPrice,products[0].producturl,products[0].imageurl)
 
-            dbProducts.child(products[0].id!!)
+            dbProducts.child(user.userid!!).child(products[0].id!!)
                 .setValue(product)
                 .addOnCompleteListener {
                     if (it.isSuccessful){
+                        
 //                        Toast.makeText(this,"Target Price added successfully",Toast.LENGTH_LONG).show()
                         Log.i("Workingg","Target Price added successfully")
                     } else{
@@ -86,7 +87,6 @@ class FragmentSetTargetPrice (private val product: Product): DialogFragment() {
                         Log.d("Error",it.exception.toString())
                     }
                 }
-
             dismiss()
         }
     }

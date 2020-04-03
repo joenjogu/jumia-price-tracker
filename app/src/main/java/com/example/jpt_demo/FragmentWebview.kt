@@ -51,7 +51,6 @@ class FragmentWebview : Fragment() {
             mWebView.reload()
             Handler().postDelayed({swiperef.isRefreshing = false},4000)
         }
-
         // Inflate the layout for this fragment
         return v
     }

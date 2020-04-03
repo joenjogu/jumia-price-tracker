@@ -11,6 +11,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductViewModel> (){
 
     private var products = mutableListOf<Product>()
     var listener : RecyclerViewClickListener? = null
+    private val user = User()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ProductViewModel(
             LayoutInflater.from(parent.context)
@@ -22,19 +23,19 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductViewModel> (){
     override fun onBindViewHolder(holder: ProductViewModel, position: Int) {
         holder.view.tv_productname.text = products[position].productname
         holder.view.tv_seller.text = products[position].seller
-        holder.view.tv_previousprice.text =  products[position].previousprice.toString()
-        holder.view.tv_currentprice.text = products[position].currentprice.toString()
-        holder.view.tv_targetprice.text = products[position].targetprice.toString()
+        holder.view.tv_previousprice.text =  "Previous Price Ksh. " + products[position].previousprice.toString()
+        holder.view.tv_currentprice.text = "Current Price Ksh. " +products[position].currentprice.toString()
+        holder.view.tv_targetprice.text = "Target Price Ksh. " +products[position].targetprice.toString()
 
         Glide.with(holder.itemView.context).load(products[position].imageurl)
             .placeholder(R.drawable.loading_image_placeholder)
             .dontAnimate().into(holder.view.productimage)
 
         holder.view.btn_product_delete.setOnClickListener{
-            listener?.itemClicked(it,products[position])
+            listener?.itemClicked(it,products[position],user)
         }
         holder.view.btn_target_price.setOnClickListener{
-            listener?.itemClicked(it,products[position])
+            listener?.itemClicked(it,products[position],user)
         }
     }
     fun setProducts(products: List<Product>){
