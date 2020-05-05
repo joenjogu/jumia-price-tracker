@@ -37,6 +37,9 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductViewModel> (){
         holder.view.btn_target_price.setOnClickListener{
             listener?.itemClicked(it,products[position],user)
         }
+        holder.view.btn_buy_now.setOnClickListener{
+            listener?.itemClicked(it,products[position],user)
+        }
     }
     fun setProducts(products: List<Product>){
         this.products = products as MutableList<Product>

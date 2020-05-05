@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -38,28 +37,29 @@ class LoginFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewmodel = ViewModelProvider(this).get(ProductsViewModel::class.java)
+//        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
         mAuth = FirebaseAuth.getInstance()
 
         val mEmail = view!!.findViewById<View>(R.id.et_email) as EditText
         val mPassword = view!!.findViewById<View>(R.id.et_password) as EditText
-        val mLoginbutton = view!!.findViewById<View>(R.id.btn_login) as Button
+        val mLoginButton = view!!.findViewById<View>(R.id.btn_login) as Button
         val mRegister = view!!.findViewById<View>(R.id.registerhere) as TextView
 
-        mLoginbutton.setOnClickListener {
+        mLoginButton.setOnClickListener {
             val email = mEmail.text.toString().trim()
             val password = mPassword.text.toString().trim()
 
             if (email.isEmpty()){
-                mEmail.setError("Email is required!")
+                mEmail.error = "Email is required!"
             }
             if (password.isEmpty()){
-                mPassword.setError("Please enter password!")
+                mPassword.error = "Please enter password!"
             }
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                mEmail.setError("Invalid Email Type")
+                mEmail.error = "Invalid Email Type"
             }
             if (password.length < 8 && password.isNotEmpty()){
-                mPassword.setError("Password should be at least 8 characters!")
+                mPassword.error = "Password should be at least 8 characters!"
             }
 
             if (mEmail.error.isNullOrEmpty() && mPassword.error.isNullOrEmpty()){
@@ -95,10 +95,8 @@ class LoginFragment : Fragment() {
                 editor.apply()
                 editor.commit()
                 Toast.makeText(context,"Login Successful",Toast.LENGTH_SHORT).show()
-                FirebaseDatabase.getInstance().setPersistenceEnabled(true)
                 val currentUserId = mAuth.currentUser?.uid
                 user.userid = currentUserId
-                Log.i("userid", "${user.userid}")
                 viewmodel.addUser(user)
                 startActivity(Intent(context,MainActivity::class.java))
             } else {

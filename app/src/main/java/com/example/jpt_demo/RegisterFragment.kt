@@ -36,39 +36,39 @@ class RegisterFragment : Fragment() {
         val mEmail = view!!.findViewById<View>(R.id.et_email) as EditText
         val mPassword = view!!.findViewById<View>(R.id.et_password) as EditText
         val mRePassword = view!!.findViewById<View>(R.id.et_repassword) as EditText
-        val mRegisterbutton = view!!.findViewById<View>(R.id.btn_register) as Button
+        val mRegisterButton = view!!.findViewById<View>(R.id.btn_register) as Button
         val mLogin = view!!.findViewById<View>(R.id.alreadyregistered) as TextView
 
-        mRegisterbutton.setOnClickListener {
-            val firstname = mFirstName.text.toString().trim()
-            val lastname = mLastName.text.toString().trim()
+        mRegisterButton.setOnClickListener {
+            val firstName = mFirstName.text.toString().trim()
+            val lastName = mLastName.text.toString().trim()
             val email = mEmail.text.toString().trim()
             val password = mPassword.text.toString().trim()
-            val repassword = mRePassword.text.toString().trim()
+            val retypedPassword = mRePassword.text.toString().trim()
 
-            if (firstname.isEmpty()){
-                mFirstName.setError("Please enter First Name!")
+            if (firstName.isEmpty()){
+                mFirstName.error = "Please enter First Name!"
             }
-            if (lastname.isEmpty()){
-                mLastName.setError("Please enter Last Name!")
+            if (lastName.isEmpty()){
+                mLastName.error = "Please enter Last Name!"
             }
             if (email.isEmpty()){
-                mEmail.setError("Email is required!")
+                mEmail.error = "Email is required!"
             }
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                mEmail.setError("Invalid Email Type")
+                mEmail.error = "Invalid Email Type"
             }
             if (password.isEmpty()){
-                mPassword.setError("Please enter password!")
+                mPassword.error = "Please enter password!"
             }
-            if (repassword.isEmpty()) {
-                mRePassword.setError("Please confirm password!")
+            if (retypedPassword.isEmpty()) {
+                mRePassword.error = "Please confirm password!"
             }
             if (password.length < 8 && password.isNotEmpty()){
-                mPassword.setError("Password should be at least 8 characters!")
+                mPassword.error = "Password should be at least 8 characters!"
             }
-            if (password!=repassword){
-                mRePassword.setError("Passwords do not match!")
+            if (password!=retypedPassword){
+                mRePassword.error = "Passwords do not match!"
             }
 
             if (mFirstName.error.isNullOrEmpty()

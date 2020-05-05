@@ -104,9 +104,28 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:text="@string/target_price"
+                android:textSize="13sp"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_marginStart="5dp"
-                android:layout_width="150dp"
+                android:layout_width="110dp"
+                android:layout_height="match_parent" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btn_buy_now"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/buy_now"
+                android:textSize="13sp"
+                android:background="@color/colorAccent"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_marginEnd="5dp"
+                android:layout_gravity="end"
+                android:layout_width="110dp"
                 android:layout_height="match_parent" />
 
             <View
@@ -119,11 +138,12 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:text="@string/delete_item"
+                android:textSize="13sp"
                 android:background="@color/colorAccent"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_marginEnd="5dp"
                 android:layout_gravity="end"
-                android:layout_width="150dp"
+                android:layout_width="110dp"
                 android:layout_height="match_parent" />
 
         </LinearLayout>

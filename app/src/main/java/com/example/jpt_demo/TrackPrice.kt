@@ -6,6 +6,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -15,14 +16,17 @@ import org.jsoup.Jsoup
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
 
-class TrackPrice (appContext: Context, workerParams: WorkerParameters, private val user: User)
+class TrackPrice (appContext: Context, workerParams: WorkerParameters)
     : Worker(appContext, workerParams) {
 
     private val dbProducts = FirebaseDatabase.getInstance().getReference(NODE_PRODUCTS)
     var products = mutableListOf<Product>()
+    private val user = User()
     val latch = CountDownLatch(1)
 
     override fun doWork(): Result {
+        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+        user.userid = currentUserId
 
         dbProducts.child(user.userid!!).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {

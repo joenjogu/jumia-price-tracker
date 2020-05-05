@@ -1,18 +1,28 @@
 package com.example.jpt_demo
 
-
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_tracklist.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.util.concurrent.CountDownLatch
 
 /**
  * A simple [Fragment] subclass.
@@ -60,6 +70,11 @@ class FragmentTracklist : Fragment(), RecyclerViewClickListener{
             adapter.addProduct(it)
         })
 
+        swiperefresh.setOnRefreshListener{
+            viewModel.fetchProducts(product,user)
+            Handler().postDelayed({swiperefresh.isRefreshing = false},4000)
+        }
+
         productrecyclerview.layoutManager = LinearLayoutManager(context)
     }
 
@@ -79,6 +94,36 @@ class FragmentTracklist : Fragment(), RecyclerViewClickListener{
                         viewModel.deleteProduct(product,user)
                     }
                 }.create().show()
+            }
+
+            R.id.btn_buy_now ->{
+                val latch = CountDownLatch(1)
+                Log.d("buy","${user.userid}")
+                val products = mutableListOf<Product>()
+
+                dbProducts.child(user.userid!!)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            Log.d("buy", "onDataChange")
+                            if (snapshot.exists()) {
+                                Log.d("buy", "snapshot exists")
+                                val prod =
+                                    snapshot.child(product.id!!)
+                                        .getValue(Product::class.java)
+                                prod?.id = snapshot.child(product.id!!).key
+                                prod?.let { products.add(it) }
+                                Log.d("buy", "product ($products)")
+
+                                val url = products[0].producturl
+                                val mUri = Uri.parse(url)
+                                val mIntent = Intent(Intent.ACTION_VIEW,mUri)
+                                startActivity(mIntent)
+                            }
+                        }
+                    })
             }
         }
     }

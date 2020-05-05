@@ -53,13 +53,13 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
 
-        val getprice = PeriodicWorkRequestBuilder<TrackPrice>(5,TimeUnit.HOURS)
+        val getPrice = PeriodicWorkRequestBuilder<TrackPrice>(15,TimeUnit.MINUTES)
             .setConstraints(constraints)
             .build()
 
         WorkManager.getInstance(this)
-            .enqueueUniquePeriodicWork("Price Tracker",ExistingPeriodicWorkPolicy.KEEP,getprice)
-        WorkManager.getInstance(this).getWorkInfoByIdLiveData(getprice.id)
+            .enqueueUniquePeriodicWork("Price Tracker",ExistingPeriodicWorkPolicy.KEEP,getPrice)
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(getPrice.id)
             .observe(this, Observer {workInfo ->
                 if (workInfo != null && workInfo.state == WorkInfo.State.RUNNING){
                     Toast.makeText(this,"Price Tracking Running",Toast.LENGTH_LONG).show()
@@ -68,16 +68,14 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             })
 
         if (!loginState){
-            val appbar = findViewById<View>(R.id.appbarlayout) as View
-            appbar.setVisibility(View.GONE)
+            val appbar = findViewById<View>(R.id.appbarlayout)
+            appbar.visibility = View.GONE
             fab_track.hide()
             fragmentTransaction.add(R.id.mainlayout, frag1)
             fragmentTransaction.commit()
         }else {
 
-//            viewmodel.addUser(user)
-
-            toolbar.setTitle("Jumia Price Tracker")
+            toolbar.title = "Jumia Price Tracker"
             setSupportActionBar(toolbar)
 
             val fragmentAdapter = PagerAdapter(supportFragmentManager)
@@ -104,8 +102,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                 }
             })
 
-            val fab_track = findViewById<View>(R.id.fab_track)
-            fab_track.setOnClickListener {
+            val fabTrack = findViewById<View>(R.id.fab_track)
+            fabTrack.setOnClickListener {
                 if ((webView.url).endsWith("html")) {
                     showProductDialog(
                         "TRACK THIS ITEM?",
@@ -134,7 +132,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             R.id.settings -> {
 //                appbarlayout.visibility = View.GONE
                 fab_track.hide()
-                fragmentTransaction.replace(R.id.mainlayout,FragmentSettings())
+                fragmentTransaction.add(R.id.mainlayout,FragmentSettings())
                 fragmentTransaction.addToBackStack("frag")
                 fragmentTransaction.commit()
             }
@@ -143,13 +141,13 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     }
 
     private fun showProductDialog(title: String, context: Context) {
-        val productdialog = AlertDialog.Builder(context)
-        val infl = layoutInflater
-        val vyu = infl.inflate(R.layout.productimage,null)
-        val prodimage = vyu.dialogprodimage
-        val prodprice = vyu.dialogprodcurrentprice
-        val prodseller = vyu.dialogprodseller
-        val prodname = vyu.dialogprodname
+        val productDialog = AlertDialog.Builder(context)
+        val inflater = layoutInflater
+        val vyu = inflater.inflate(R.layout.productimage,null)
+        val productImage = vyu.dialogprodimage
+        val productPrice = vyu.dialogprodcurrentprice
+        val productSeller = vyu.dialogprodseller
+        val productName = vyu.dialogprodname
         val prodImageUrl = vyu.dialogimageurl
 
         val url = webView.url
@@ -162,25 +160,25 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                     val prodName = doc.select("h1.-fs20").text()
                     val sellerName = doc.select("p.-m").first().text()
                     val price = doc.select("span[data-price]").select(".-fs24").text()
-                    val imgurl = doc.select("img[data-lazy-slide]").attr("data-src")
+                    val imageUrl = doc.select("img[data-lazy-slide]").attr("data-src")
 
-                    resarr = arrayOf(prodName,sellerName,price,imgurl)
+                    resarr = arrayOf(prodName,sellerName,price,imageUrl)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
                 withContext(Dispatchers.Main){
-                    prodname.text =resarr[0]
-                    prodseller.text = resarr[1]
-                    prodprice.text = resarr[2]
+                    productName.text =resarr[0]
+                    productSeller.text = resarr[1]
+                    productPrice.text = resarr[2]
                     prodImageUrl.text = resarr[3]
-                    Glide.with(this@MainActivity).load(resarr[3]).into(prodimage)
+                    Glide.with(this@MainActivity).load(resarr[3]).into(productImage)
                 }
             }
         }
 
         CoroutineScope(Dispatchers.Main).launch { getDetails(url) }
-        productdialog.setTitle(title)
-        productdialog.setView(vyu)
+        productDialog.setTitle(title)
+        productDialog.setView(vyu)
 
         viewmodel.result.observe(this, Observer {
             if (it == null){
@@ -190,15 +188,15 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             }
         })
 
-        productdialog.setNegativeButton("Cancel") { _, _ ->
+        productDialog.setNegativeButton("Cancel") { _, _ ->
 
         }
-        productdialog.setPositiveButton("Confirm") { _, _->
+        productDialog.setPositiveButton("Confirm") { _, _->
             val regex = """[^0-9]"""
-            val prodPrice = prodprice.text.trim().replace(regex.toRegex(),"").toInt()
+            val prodPrice = productPrice.text.trim().replace(regex.toRegex(),"").toInt()
             val product = Product()
-            product.productname = prodname.text.toString()
-            product.seller = prodseller.text.toString()
+            product.productname = productName.text.toString()
+            product.seller = productSeller.text.toString()
             product.previousprice = prodPrice
             product.imageurl = prodImageUrl.text.toString()
             product.producturl = url
@@ -209,7 +207,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             viewmodel.addProduct(product,user)
 
         }
-        productdialog.create().show()
+        productDialog.create().show()
     }
 
     private fun showLogoutDialog(message: String, context: Context) {
@@ -217,12 +215,12 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         val sharedPreferences : SharedPreferences = this.getSharedPreferences(sharedPrefFile,
             Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = sharedPreferences.edit()
-        val logoutdialog = AlertDialog.Builder(context)
-        logoutdialog.setMessage(message)
-        logoutdialog.setNegativeButton("Cancel") { _, _ ->
+        val logoutDialog = AlertDialog.Builder(context)
+        logoutDialog.setMessage(message)
+        logoutDialog.setNegativeButton("Cancel") { _, _ ->
 
         }
-        logoutdialog.setPositiveButton("Logout") { _, _ ->
+        logoutDialog.setPositiveButton("Logout") { _, _ ->
             FirebaseAuth.getInstance().signOut()
             editor.clear()
             editor.apply()
@@ -231,7 +229,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             fragmentTransaction.replace(R.id.mainlayout,frag1)
             fragmentTransaction.commit()
         }
-        logoutdialog.create().show()
+        logoutDialog.create().show()
     }
 
     private fun createNotificationChannel () {
