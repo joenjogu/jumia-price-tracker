@@ -27,8 +27,9 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
     override fun doWork(): Result {
         val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
         user.userid = currentUserId
+        Log.i("tracker", currentUserId)
 
-        dbProducts.child(user.userid!!).addListenerForSingleValueEvent(object : ValueEventListener{
+        dbProducts.child(currentUserId).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
                 latch.countDown()
             }

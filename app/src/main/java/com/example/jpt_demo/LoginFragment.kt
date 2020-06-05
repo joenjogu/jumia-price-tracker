@@ -13,7 +13,6 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 
 /**
  * A simple [Fragment] subclass.
@@ -94,11 +93,13 @@ class LoginFragment : Fragment() {
                 editor.putBoolean("login_state_key", true)
                 editor.apply()
                 editor.commit()
+                user.isLoggedIn = true
                 Toast.makeText(context,"Login Successful",Toast.LENGTH_SHORT).show()
-                val currentUserId = mAuth.currentUser?.uid
-                user.userid = currentUserId
-                viewmodel.addUser(user)
+//                val currentUserId = mAuth.currentUser?.uid
+//                user.userid = currentUserId
+//                viewmodel.addUser(user)
                 startActivity(Intent(context,MainActivity::class.java))
+                fragmentManager?.popBackStack()
             } else {
                 Toast.makeText(context,it.exception?.message, Toast.LENGTH_SHORT).show()
             }

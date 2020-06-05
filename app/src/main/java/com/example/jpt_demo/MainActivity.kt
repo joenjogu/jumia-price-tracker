@@ -43,6 +43,10 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+//        if (savedInstanceState == null){
+//            FirebaseDatabase.getInstance().setPersistenceEnabled(true)
+//        }
+
         createNotificationChannel()
 
         viewmodel = ViewModelProvider(this).get(ProductsViewModel::class.java)
@@ -61,9 +65,13 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             .enqueueUniquePeriodicWork("Price Tracker",ExistingPeriodicWorkPolicy.KEEP,getPrice)
         WorkManager.getInstance(this).getWorkInfoByIdLiveData(getPrice.id)
             .observe(this, Observer {workInfo ->
-                if (workInfo != null && workInfo.state == WorkInfo.State.RUNNING){
+                if (workInfo != null && workInfo.state == WorkInfo.State.ENQUEUED){
                     Toast.makeText(this,"Price Tracking Running",Toast.LENGTH_LONG).show()
-                    Log.i("Working","Price Tracking Running")
+                    Log.i("Working","Price Tracking Enqueued")
+                }
+                if (workInfo != null && workInfo.state == WorkInfo.State.CANCELLED){
+                    Toast.makeText(this,"Price Tracking Running",Toast.LENGTH_LONG).show()
+                    Log.i("Working","Price Tracking Cancelled")
                 }
             })
 
@@ -222,6 +230,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         }
         logoutDialog.setPositiveButton("Logout") { _, _ ->
             FirebaseAuth.getInstance().signOut()
+            user.isLoggedIn = false
             editor.clear()
             editor.apply()
             editor.commit()

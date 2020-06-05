@@ -30,7 +30,6 @@ class FragmentSetTargetPrice (private val product: Product,private val user: Use
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewmodel = ViewModelProvider(this).get(ProductsViewModel::class.java)
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_set_target_price, container, false)
     }
@@ -42,6 +41,7 @@ class FragmentSetTargetPrice (private val product: Product,private val user: Use
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        viewmodel = ViewModelProvider(this).get(ProductsViewModel::class.java)
 
         dbProducts.child(user.userid!!).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
@@ -71,12 +71,12 @@ class FragmentSetTargetPrice (private val product: Product,private val user: Use
                 return@setOnClickListener
             }
 
-            val product = Product(products[0].id,products[0].productname,
+            val newProduct = Product(products[0].id,products[0].productname,
                 products[0].seller,products[0].currentprice,products[0].previousprice,
                 targetPrice,products[0].producturl,products[0].imageurl)
 
             dbProducts.child(user.userid!!).child(products[0].id!!)
-                .setValue(product)
+                .setValue(newProduct)
                 .addOnCompleteListener {
                     if (it.isSuccessful){
                         
@@ -87,6 +87,9 @@ class FragmentSetTargetPrice (private val product: Product,private val user: Use
                         Log.d("Error",it.exception.toString())
                     }
                 }
+
+            viewmodel.fetchProducts(product,user)
+            Log.i("update","$product, $user")
             dismiss()
         }
     }

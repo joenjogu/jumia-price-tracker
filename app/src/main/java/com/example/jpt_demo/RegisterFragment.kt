@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 
 /**
@@ -17,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth
 class RegisterFragment : Fragment() {
 
     private lateinit var mAuth : FirebaseAuth
+    private lateinit var viewmodel : ProductsViewModel
+    private val user = User()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,7 +31,7 @@ class RegisterFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        viewmodel = ViewModelProvider(this).get(ProductsViewModel::class.java)
         mAuth = FirebaseAuth.getInstance()
 
         val mFirstName = view!!.findViewById<View>(R.id.et_firstname) as EditText
@@ -104,6 +107,9 @@ class RegisterFragment : Fragment() {
         mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener {
             mProgressbar.visibility = View.GONE
             if (it.isSuccessful){
+                val currentUserId = mAuth.currentUser?.uid
+                user.userid = currentUserId
+                viewmodel.addUser(user)
                 Toast.makeText(context,"Registration Successful", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(context,MainActivity::class.java))
             } else {
