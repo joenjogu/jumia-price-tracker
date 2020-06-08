@@ -62,12 +62,16 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             .build()
 
         WorkManager.getInstance(this)
-            .enqueueUniquePeriodicWork("Price Tracker",ExistingPeriodicWorkPolicy.KEEP,getPrice)
+            .enqueueUniquePeriodicWork("Price Tracker",ExistingPeriodicWorkPolicy.REPLACE,getPrice)
         WorkManager.getInstance(this).getWorkInfoByIdLiveData(getPrice.id)
             .observe(this, Observer {workInfo ->
                 if (workInfo != null && workInfo.state == WorkInfo.State.ENQUEUED){
-                    Toast.makeText(this,"Price Tracking Running",Toast.LENGTH_LONG).show()
+                    Toast.makeText(this,"Price Tracking Enqueued",Toast.LENGTH_LONG).show()
                     Log.i("Working","Price Tracking Enqueued")
+                }
+                if (workInfo != null && workInfo.state == WorkInfo.State.RUNNING){
+                    Toast.makeText(this,"Price Tracking Running",Toast.LENGTH_LONG).show()
+                    Log.i("Working","Price Tracking Running")
                 }
                 if (workInfo != null && workInfo.state == WorkInfo.State.CANCELLED){
                     Toast.makeText(this,"Price Tracking Running",Toast.LENGTH_LONG).show()
