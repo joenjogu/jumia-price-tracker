@@ -28,6 +28,7 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
         val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
         user.userid = currentUserId
         Log.i("tracker", currentUserId)
+        showTrackerRunningNotification()
 
         dbProducts.child(currentUserId).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
@@ -138,10 +139,10 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
             .setStyle(NotificationCompat.BigTextStyle().bigText(notificationText))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-        val notifManager : NotificationManagerCompat = NotificationManagerCompat
+        val notificationManager : NotificationManagerCompat = NotificationManagerCompat
             .from(applicationContext)
 
-        notifManager.notify(NotificationID.id,builder.build())
+        notificationManager.notify(NotificationID.id,builder.build())
     }
 
     private fun showTargetPriceHitNotification (notificationProduct: String, notificationTargetPrice: String){
@@ -155,10 +156,25 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
             .setStyle(NotificationCompat.BigTextStyle().bigText(notificationText))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-        val notifManager : NotificationManagerCompat = NotificationManagerCompat
+        val notificationManager : NotificationManagerCompat = NotificationManagerCompat
             .from(applicationContext)
 
-        notifManager.notify(NotificationID.id,builder.build())
+        notificationManager.notify(NotificationID.id,builder.build())
+    }
+
+    private fun showTrackerRunningNotification(){
+        val notificationText = "Price Tracker Running"
+
+        val builder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_trending_down_black_24dp)
+            .setContentTitle("Price Tracker")
+            .setContentText(notificationText)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+        val notificationManager : NotificationManagerCompat = NotificationManagerCompat
+            .from(applicationContext)
+
+        notificationManager.notify(1,builder.build())
     }
 
     object NotificationID {

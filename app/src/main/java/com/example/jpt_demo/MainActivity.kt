@@ -43,10 +43,6 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        if (savedInstanceState == null){
-//            FirebaseDatabase.getInstance().setPersistenceEnabled(true)
-//        }
-
         createNotificationChannel()
 
         viewmodel = ViewModelProvider(this).get(ProductsViewModel::class.java)
@@ -143,10 +139,10 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             }
             R.id.settings -> {
 //                appbarlayout.visibility = View.GONE
-                fab_track.hide()
-                fragmentTransaction.add(R.id.mainlayout,FragmentSettings())
-                fragmentTransaction.addToBackStack("frag")
-                fragmentTransaction.commit()
+//                fab_track.hide()
+//                fragmentTransaction.add(R.id.mainlayout,FragmentSettings())
+//                fragmentTransaction.addToBackStack("frag")
+//                fragmentTransaction.commit()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -239,6 +235,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             editor.apply()
             editor.commit()
             appbarlayout.visibility = View.GONE
+            fab_track.hide()
             fragmentTransaction.replace(R.id.mainlayout,frag1)
             fragmentTransaction.commit()
         }
