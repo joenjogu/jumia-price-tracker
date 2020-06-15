@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,8 +19,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_tracklist.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.concurrent.CountDownLatch
 
 /**
@@ -42,9 +39,7 @@ class FragmentTracklist : Fragment(), RecyclerViewClickListener{
         viewModel = ViewModelProvider(this).get(ProductsViewModel::class.java)
 
         // Inflate the layout for this fragment
-        val v = inflater.inflate(R.layout.fragment_tracklist, container, false)
-
-        return v
+        return inflater.inflate(R.layout.fragment_tracklist, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
