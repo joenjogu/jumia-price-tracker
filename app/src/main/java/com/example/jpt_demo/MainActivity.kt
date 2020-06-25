@@ -247,7 +247,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             val importance = NotificationManager.IMPORTANCE_HIGH
             val name = getString(R.string.channel_name)
             val descriptionText = getString(R.string.channel_description)
-            val channel = NotificationChannel(CHANNEL_ID,name,importance).apply {
+            val channel = NotificationChannel("Price Tracker Notification Channel ID",name,importance).apply {
                 description = descriptionText
             }
 

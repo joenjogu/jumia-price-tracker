@@ -1,6 +1,8 @@
 package com.example.jpt_demo
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -19,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger
 class TrackPrice (appContext: Context, workerParams: WorkerParameters)
     : Worker(appContext, workerParams) {
 
-    private val dbProducts = FirebaseDatabase.getInstance().getReference(NODE_PRODUCTS)
+    private val dbProducts = FirebaseDatabase.getInstance().getReference("products")
     var products = mutableListOf<Product>()
     private val user = User()
     val latch = CountDownLatch(1)
@@ -131,11 +133,17 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
 
         val notificationText =
             "The price of $notificationProduct has dropped from $notificationPrevPrice to $notificationCurrPrice"
+        val intent = Intent(applicationContext, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
 
-        val builder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+        val builder = NotificationCompat.Builder(applicationContext, "Price Tracker Notification Channel ID")
             .setSmallIcon(R.drawable.ic_trending_down_black_24dp)
             .setContentTitle("Price Drop Detected")
             .setContentText("A lower Price has been detected for your item")
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
             .setStyle(NotificationCompat.BigTextStyle().bigText(notificationText))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
@@ -148,11 +156,17 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
     private fun showTargetPriceHitNotification (notificationProduct: String, notificationTargetPrice: String){
         val notificationText =
             "Target Price $notificationTargetPrice Hit for $notificationProduct"
+        val intent = Intent(applicationContext, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, 0)
 
-        val builder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+        val builder = NotificationCompat.Builder(applicationContext, "Price Tracker Notification Channel ID")
             .setSmallIcon(R.drawable.ic_trending_down_black_24dp)
             .setContentTitle("Target Price Hit")
             .setContentText("Your Target Price has been hit")
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
             .setStyle(NotificationCompat.BigTextStyle().bigText(notificationText))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
@@ -165,7 +179,7 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
     private fun showTrackerRunningNotification(){
         val notificationText = "Price Tracker Running"
 
-        val builder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+        val builder = NotificationCompat.Builder(applicationContext, "Price Tracker Notification Channel ID")
             .setSmallIcon(R.drawable.ic_trending_down_black_24dp)
             .setContentTitle("Price Tracker")
             .setContentText(notificationText)
