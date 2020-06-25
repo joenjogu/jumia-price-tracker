@@ -90,8 +90,6 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
 
                         })
 
-//                    showPriceDropNotification(notificationProduct,notificationCurrPrice,notificationPrevPrice)
-
                     fun setCurrentPrice (){
                         val product = Product(products[position].id,
                             products[position].productname,
