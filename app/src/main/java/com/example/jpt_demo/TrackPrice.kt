@@ -3,11 +3,16 @@ package com.example.jpt_demo
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -70,7 +75,22 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
                     val notificationCurrPrice =  currPrice.toString()
                     val notificationProduct = products[position].productname!!
 
-                    showPriceDropNotification(notificationProduct,notificationCurrPrice,notificationPrevPrice)
+                    Glide.with(applicationContext).asBitmap().load(products[position].imageurl)
+                        .into(object : CustomTarget<Bitmap>(){
+                            override fun onResourceReady(
+                                resource: Bitmap,
+                                transition: Transition<in Bitmap>?
+                            ) {
+                                showPriceDropNotification(notificationProduct,notificationCurrPrice,notificationPrevPrice, resource)
+                            }
+
+                            override fun onLoadCleared(placeholder: Drawable?) {
+
+                            }
+
+                        })
+
+//                    showPriceDropNotification(notificationProduct,notificationCurrPrice,notificationPrevPrice)
 
                     fun setCurrentPrice (){
                         val product = Product(products[position].id,
@@ -129,10 +149,10 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
     }
 
     private fun showPriceDropNotification
-                (notificationProduct: String,notificationCurrPrice : String,notificationPrevPrice : String){
-
+                (notificationProduct: String, notificationCurrPrice : String, notificationPrevPrice : String, productImage : Bitmap){
+        val productName = notificationProduct.trim().slice(0..20)
         val notificationText =
-            "The price of $notificationProduct has dropped from $notificationPrevPrice to $notificationCurrPrice"
+            "$productName dropped from Ksh$notificationPrevPrice to $notificationCurrPrice"
         val intent = Intent(applicationContext, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -141,10 +161,11 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
         val builder = NotificationCompat.Builder(applicationContext, "Price Tracker Notification Channel ID")
             .setSmallIcon(R.drawable.ic_trending_down_black_24dp)
             .setContentTitle("Price Drop Detected")
-            .setContentText("A lower Price has been detected for your item")
+            .setContentText(notificationText)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(notificationText))
+            .setLargeIcon(productImage)
+            .setStyle(NotificationCompat.BigPictureStyle().bigPicture(productImage).bigLargeIcon(null))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         val notificationManager : NotificationManagerCompat = NotificationManagerCompat
