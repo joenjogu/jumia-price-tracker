@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
 
-        val getPrice = PeriodicWorkRequestBuilder<TrackPrice>(15,TimeUnit.MINUTES)
+        val getPrice = PeriodicWorkRequestBuilder<TrackPrice>(720,TimeUnit.MINUTES)
             .setConstraints(constraints)
             .build()
 
@@ -205,7 +205,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
             val product = Product()
             product.productname = productName.text.toString()
             product.seller = productSeller.text.toString()
-            product.previousprice = prodPrice
+            product.currentprice = prodPrice
             product.imageurl = prodImageUrl.text.toString()
             product.producturl = url
 

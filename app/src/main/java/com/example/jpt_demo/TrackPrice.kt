@@ -66,13 +66,14 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
                     getCurrentPrice(products[position].producturl)
                 }
 
-                val currPrice = currentPrice.await()
+                val scrapedPrice = currentPrice.await()
 
-                Log.i("Working","got current price $currPrice")
+                Log.i("Working","got current price $scrapedPrice")
 
-                if (currPrice < products[position].previousprice!!){
+                if (scrapedPrice < products[position].currentprice!!){
+                    products[position].previousprice = products[position].currentprice
                     val notificationPrevPrice = products[position].previousprice!!.toString()
-                    val notificationCurrPrice =  currPrice.toString()
+                    val notificationCurrPrice =  scrapedPrice.toString()
                     val notificationProduct = products[position].productname!!
 
                     Glide.with(applicationContext).asBitmap().load(products[position].imageurl)
@@ -91,10 +92,14 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
                         })
 
                     fun setCurrentPrice (){
-                        val product = Product(products[position].id,
+                        val product = Product(
+                            products[position].id,
                             products[position].productname,
-                            products[position].seller,currPrice,products[position].previousprice,
-                            products[position].targetprice,products[position].producturl,
+                            products[position].seller,
+                            scrapedPrice,
+                            products[position].previousprice,
+                            products[position].targetprice,
+                            products[position].producturl,
                             products[position].imageurl)
 
                         dbProducts.child(user.userid!!).child(products[position].id!!)
@@ -106,7 +111,7 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
                                     Log.d("Error",it.exception.toString())
                                 }
                             }
-                        Log.i("Working","set current price $currPrice")
+                        Log.i("Working","set current price $scrapedPrice")
                     }
                     launch {
                         setCurrentPrice()
@@ -115,8 +120,7 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
 
                 }
                 if (products[position].targetprice != null)
-
-                    if (currPrice == products[position].targetprice){
+                    if (scrapedPrice == products[position].targetprice){
                         val notificationTargetPrice = products[position].targetprice.toString()
                         val notificationProduct = products[position].productname!!
 
