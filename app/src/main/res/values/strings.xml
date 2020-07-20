@@ -41,4 +41,6 @@
     <string name="about_section_title">About</string>
     <string name="no_item_alert">Please select an item to track</string>
     <string name="buy_now">buy now</string>
+    <string name="developed_by_joe_njogu">Developed by Joe Njogu</string>
+    <string name="github_com_joenjogu">github.com/joenjogu</string>
 </resources>
