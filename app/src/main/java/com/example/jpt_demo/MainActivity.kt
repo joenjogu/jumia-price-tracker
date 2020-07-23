@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -47,7 +49,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
 
         viewmodel = ViewModelProvider(this).get(ProductsViewModel::class.java)
 
-        val sharedPreferences : SharedPreferences = this.getSharedPreferences(sharedPrefFile,
+        val sharedPreferences : SharedPreferences = this.getSharedPreferences(
+            sharedPrefFile,
             Context.MODE_PRIVATE)
         val loginState = sharedPreferences.getBoolean("login_state_key",false)
 
@@ -138,11 +141,14 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                 )
             }
             R.id.settings -> {
-//                appbarlayout.visibility = View.GONE
+//                appbarlayout.visibility = View.INVISIBLE
 //                fab_track.hide()
 //                fragmentTransaction.add(R.id.mainlayout,FragmentSettings())
-//                fragmentTransaction.addToBackStack("frag")
+//                fragmentTransaction.addToBackStack(null)
 //                fragmentTransaction.commit()
+//                appbarlayout.visibility = View.VISIBLE
+
+                startActivity(Intent(this,SettingsActivity::class.java))
             }
         }
         return super.onOptionsItemSelected(item)
@@ -219,7 +225,6 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     }
 
     private fun showLogoutDialog(message: String, context: Context) {
-        val sharedPrefFile = "LoginPrefFile"
         val sharedPreferences : SharedPreferences = this.getSharedPreferences(sharedPrefFile,
             Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = sharedPreferences.edit()
@@ -243,17 +248,27 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
     }
 
     private fun createNotificationChannel () {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val name = getString(R.string.channel_name)
-            val descriptionText = getString(R.string.channel_description)
-            val channel = NotificationChannel("Price Tracker Notification Channel ID",name,importance).apply {
-                description = descriptionText
-            }
+        val sharedPref : SharedPreferences = this.getSharedPreferences(
+            "notificationSharedPreference",
+            Context.MODE_PRIVATE
+        )
 
-            val notificationManager : NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (sharedPref.getBoolean("notificationSharedPreference", false)){
+            NotificationManagerCompat.from(this).cancelAll()
+        }else{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                val importance = NotificationManager.IMPORTANCE_HIGH
+                val name = getString(R.string.channel_name)
+                val descriptionText = getString(R.string.channel_description)
+                val channel = NotificationChannel(
+                    "Price Tracker Notification Channel ID",name,importance).apply {
+                    description = descriptionText
+                }
+
+                val notificationManager : NotificationManager =
+                    getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 notificationManager.createNotificationChannel(channel)
+            }
         }
     }
 }
