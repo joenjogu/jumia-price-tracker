@@ -3,6 +3,7 @@ package com.example.jpt_demo
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.text.TextUtils
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -66,7 +67,7 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
 
                 Log.i("Working","got current price $scrapedPrice")
 
-                if (scrapedPrice < products[position].currentprice!!){
+                if (scrapedPrice < products[position].currentprice!! && scrapedPrice != 0){
                     products[position].previousprice = products[position].currentprice
                     val notificationPrevPrice = products[position].previousprice!!.toString()
                     val notificationCurrPrice =  scrapedPrice.toString()
@@ -145,6 +146,8 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
         }
         latch.countDown()
         val regex = """[^0-9]"""
-        return currentprice.trim().replace(regex.toRegex(),"").toInt()
+        return if (!TextUtils.isEmpty(currentprice))
+            currentprice.trim().replace(regex.toRegex(),"").toInt()
+        else 0
     }
 }
