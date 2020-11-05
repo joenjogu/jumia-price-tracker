@@ -9,7 +9,7 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/jpt__splash_frgrd"/>
+            android:src="@drawable/jpt_splash_frgrd"/>
 
     </item>
 
