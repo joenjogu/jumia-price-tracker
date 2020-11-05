@@ -63,6 +63,11 @@ class FragmentTracklist : Fragment(), RecyclerViewClickListener{
 
         viewModel.product.observe(viewLifecycleOwner, Observer {
             adapter.addProduct(it)
+            if (adapter.itemCount == 0){
+                tracklist_placeholder.visibility = View.VISIBLE
+            } else {
+                tracklist_placeholder.visibility = View.GONE
+            }
         })
 
         swiperefresh.setOnRefreshListener{
@@ -71,6 +76,12 @@ class FragmentTracklist : Fragment(), RecyclerViewClickListener{
         }
 
         productrecyclerview.layoutManager = LinearLayoutManager(context)
+
+        if (adapter.itemCount == 0){
+            tracklist_placeholder.visibility = View.VISIBLE
+        } else {
+            tracklist_placeholder.visibility = View.GONE
+        }
 
     }
 
