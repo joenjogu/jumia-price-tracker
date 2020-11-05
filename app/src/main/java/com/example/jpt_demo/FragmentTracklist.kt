@@ -71,6 +71,7 @@ class FragmentTracklist : Fragment(), RecyclerViewClickListener{
         }
 
         productrecyclerview.layoutManager = LinearLayoutManager(context)
+
     }
 
     override fun itemClicked(view: View, product: Product, user: User) {

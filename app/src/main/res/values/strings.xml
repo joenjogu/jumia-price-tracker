@@ -43,4 +43,5 @@
     <string name="buy_now">buy now</string>
     <string name="developed_by_joe_njogu">Developed by Joe Njogu</string>
     <string name="github_com_joenjogu">github.com/joenjogu</string>
+    <string name="empty_tracklist_info">Your Tracklist is empty.\n Click the SHOP tab on the left to add new items.</string>
 </resources>
