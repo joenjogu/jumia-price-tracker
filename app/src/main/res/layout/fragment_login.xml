@@ -94,6 +94,18 @@
         android:text="@string/not_registered"
         android:textSize="15sp" />
 
+    <TextView
+        android:id="@+id/tv_reset_password"
+        android:text="@string/forgot_password_reset_here"
+        android:textColor="@color/colorHyperlink"
+        android:textSize="15sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="490dp"/>
+
     <ProgressBar
         android:id="@+id/loginprogressbar"
         style="?android:attr/progressBarStyle"

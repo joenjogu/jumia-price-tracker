@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.fragment_login.*
 
 /**
  * A simple [Fragment] subclass.
@@ -36,7 +38,6 @@ class LoginFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewmodel = ViewModelProvider(this).get(ProductsViewModel::class.java)
-//        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
         mAuth = FirebaseAuth.getInstance()
 
         val mEmail = view!!.findViewById<View>(R.id.et_email) as EditText
@@ -77,6 +78,14 @@ class LoginFragment : Fragment() {
             fragmentTransaction.replace(R.id.mainlayout, frag2)
             fragmentTransaction.commit()
         }
+
+        tv_reset_password.setOnClickListener{
+            if (TextUtils.isEmpty(mEmail.text)){
+                Toast.makeText(context, "Please enter your email first", Toast.LENGTH_LONG).show()
+            } else{
+                resetPassword(mEmail.text.toString().trim())
+            }
+        }
     }
 
     private fun loginUser(email: String, password: String) {
@@ -95,13 +104,20 @@ class LoginFragment : Fragment() {
                 editor.commit()
                 user.isLoggedIn = true
                 Toast.makeText(context,"Login Successful",Toast.LENGTH_SHORT).show()
-//                val currentUserId = mAuth.currentUser?.uid
-//                user.userid = currentUserId
-//                viewmodel.addUser(user)
                 startActivity(Intent(context,MainActivity::class.java))
                 fragmentManager?.popBackStack()
             } else {
                 Toast.makeText(context,it.exception?.message, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun resetPassword(email : String){
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener {
+            if (it.isSuccessful){
+                Toast.makeText(context,"Reset Email Sent",Toast.LENGTH_LONG).show()
+            } else{
+                Toast.makeText(context,it.exception?.message, Toast.LENGTH_LONG).show()
             }
         }
     }

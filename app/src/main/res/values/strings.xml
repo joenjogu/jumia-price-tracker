@@ -16,7 +16,7 @@
     <string name="re_type_password">Re-type Password</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
-    <string name="logintag">LogIn to track the price of your favorite items</string>
+    <string name="logintag">Log In to track the price of your favorite items</string>
     <string name="product_image">product image</string>
     <string name="by">by</string>
     <string name="current_price_ksh">Current Price: Ksh. %1$d</string>
@@ -46,4 +46,5 @@
     <string name="empty_tracklist_info">Your Tracklist is empty.\n Click the SHOP tab on the left to add new items.</string>
     <string name="email_address">Email Address</string>
     <string name="verification_status">Verification Status</string>
+    <string name="forgot_password_reset_here">Forgot Password? Reset Here</string>
 </resources>
