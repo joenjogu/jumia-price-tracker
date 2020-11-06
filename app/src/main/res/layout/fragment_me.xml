@@ -16,21 +16,45 @@
         android:layout_gravity="center_horizontal"/>
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:text="@string/email_address"
+        android:textSize="20sp"/>
+
+    <TextView
         android:id="@+id/mefragemail"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:background="@drawable/et_custom"
-        android:textSize="20sp" />
+        android:layout_marginTop="5dp"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        tools:text="demo@gmail.com"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:text="@string/verification_status"
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/mefragverificationstatus"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="20dp"
-        android:background="@drawable/et_custom"
-        android:textSize="20sp" />
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        tools:text="Not Verified"/>
 
     <Button
         android:id="@+id/btn_verify"
@@ -39,7 +63,7 @@
         android:layout_gravity="center"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/btn_custom"
         android:fontFamily="sans-serif"
         android:text="@string/verify"
