@@ -8,12 +8,7 @@
     android:background="@color/colorWhite"
     tools:context=".RegisterFragment">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/loginicon"
-        android:src="@drawable/man_icon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"/>
+
 
     <TextView
         android:id="@+id/tv_logo"
