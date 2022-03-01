@@ -8,7 +8,7 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/loginicon"
-        android:src="@drawable/man_icon"
+        android:src="@drawable/user_avatar"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="10dp"

@@ -63,7 +63,7 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
                     getCurrentPrice(products[position].producturl)
                 }
 
-                val scrapedPrice = currentPrice.await()
+                val scrapedPrice = currentPrice.await() - 100
 
                 Log.i("Working","got current price $scrapedPrice")
 
@@ -116,6 +116,33 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
                         latch.countDown()
                     }
 
+                } else if (scrapedPrice > products[position].currentprice!! ){
+                    fun setCurrentPrice (){
+                        val product = Product(
+                            products[position].id,
+                            products[position].productname,
+                            products[position].seller,
+                            scrapedPrice,
+                            products[position].previousprice,
+                            products[position].targetprice,
+                            products[position].producturl,
+                            products[position].imageurl)
+
+                        dbProducts.child(user.userid!!).child(products[position].id!!)
+                            .setValue(product)
+                            .addOnCompleteListener {
+                                if (it.isSuccessful){
+                                    Log.i("Working","Current Price added successfully")
+                                } else{
+                                    Log.d("Error",it.exception.toString())
+                                }
+                            }
+                        Log.i("Working","set current price $scrapedPrice")
+                    }
+                    launch {
+                        setCurrentPrice()
+                        latch.countDown()
+                    }
                 }
                 if (products[position].targetprice != null)
                     if (scrapedPrice == products[position].targetprice){
@@ -139,7 +166,7 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
         withContext(Dispatchers.IO){
             val doc = Jsoup.connect(url).get()
             try {
-                currentprice = doc.select("span[data-price]").select(".-fs24").text()
+                currentprice = doc.select(".-fs24.-tal.-ltr.-b").text()
             }catch (e: Exception){
                 e.printStackTrace()
             }
