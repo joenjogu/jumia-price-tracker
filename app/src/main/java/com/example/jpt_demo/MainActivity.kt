@@ -173,7 +173,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner {
                 try {
                     val prodName = doc.select("h1.-fs20").text()
                     val sellerName = doc.select("p.-m").first().text()
-                    val price = doc.select("span[data-price]").select(".-fs24").text()
+                    val price = doc.select(".-fs24.-tal.-ltr.-b").text()
                     val imageUrl = doc.select("img[data-lazy-slide]").attr("data-src")
 
                     resarr = arrayOf(prodName,sellerName,price,imageUrl)

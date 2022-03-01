@@ -166,7 +166,7 @@ class TrackPrice (appContext: Context, workerParams: WorkerParameters)
         withContext(Dispatchers.IO){
             val doc = Jsoup.connect(url).get()
             try {
-                currentprice = doc.select("span[data-price]").select(".-fs24").text()
+                currentprice = doc.select(".-fs24.-tal.-ltr.-b").text()
             }catch (e: Exception){
                 e.printStackTrace()
             }
